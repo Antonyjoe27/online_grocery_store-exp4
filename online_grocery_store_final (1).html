@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FreshCart - Online Grocery Store</title>
+<style>
+
+  /* ---------- Reset & base ---------- */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --leaf: #2F5D3A;
+    --leaf-dark: #1E3F27;
+    --tomato: #C1440E;
+    --cream: #FBF6EC;
+    --paper: #FFFFFF;
+    --ink: #26291F;
+    --muted: #6B7160;
+    --line: #E1DCC9;
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--cream);
+    color: var(--ink);
+    line-height: 1.6;
+    width: 100%;
+  }
+
+  h1, h2, h3 {
+    font-family: Georgia, 'Times New Roman', serif;
+    color: var(--leaf-dark);
+    font-weight: normal;
+  }
+
+  img { max-width: 100%; display: block; }
+
+  /* ---------- Header ---------- */
+  header {
+    background-color: var(--leaf);
+    color: var(--paper);
+    padding: 18px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  header h1 {
+    color: var(--paper);
+    font-size: 30px;
+    letter-spacing: 1px;
+  }
+
+  header h1 span { color: #F4C95D; }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 28px;
+  }
+
+  nav ul li a {
+    text-decoration: none;
+    font-size: 15px;
+    padding: 6px 4px;
+  }
+
+  .has-dropdown { position: relative; }
+  .dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 190px;
+    background: var(--paper);
+    box-shadow: 0 5px 15px rgba(0,0,0,.18);
+    z-index: 20;
+  }
+  .dropdown a { color: var(--ink) !important; padding: 10px 14px; }
+  .dropdown a:hover { background: var(--cream); color: var(--leaf) !important; border: 0; }
+  .has-dropdown:hover .dropdown { display: block; }
+
+  /* ---------- Link states ---------- */
+  nav ul li a:link    { color: var(--cream); }
+  nav ul li a:visited { color: #C9D9C7; }
+  nav ul li a:hover   { color: #F4C95D; border-bottom: 2px solid #F4C95D; }
+  nav ul li a:active  { color: var(--tomato); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    background: linear-gradient(120deg, var(--leaf-dark) 0%, var(--leaf) 100%);
+    color: var(--cream);
+    padding: 60px 40px;
+    text-align: left;
+  }
+
+  .hero h2 {
+    color: var(--paper);
+    font-size: 42px;
+    max-width: 600px;
+    margin-bottom: 14px;
+  }
+
+  .hero p {
+    max-width: 520px;
+    color: #DCE7D8;
+    margin-bottom: 20px;
+  }
+
+  .hero a.cta {
+    display: inline-block;
+    background-color: var(--tomato);
+    color: var(--paper);
+    padding: 12px 26px;
+    text-decoration: none;
+    font-size: 15px;
+  }
+
+  .hero a.cta:link    { color: var(--paper); }
+  .hero a.cta:visited { color: var(--paper); }
+  .hero a.cta:hover   { background-color: #A5390B; }
+  .hero a.cta:active  { background-color: #7E2C08; }
+
+  /* ---------- Categories: multi-column layout via flex ---------- */
+  .categories {
+    padding: 50px 40px;
+  }
+
+  .categories h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+  }
+
+  .category-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  .category-card {
+    background-color: var(--paper);
+    border: 1px solid var(--line);
+    width: 220px;
+    height: 260px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .category-card img {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 14px auto;
+    border-radius: 50%;
+    background-color: var(--cream);
+  }
+
+  .category-card h3 {
+    font-size: 19px;
+    margin-bottom: 8px;
+  }
+
+  .category-card p {
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  /* ---------- Featured products ---------- */
+  .products {
+    background-color: var(--paper);
+    padding: 50px 40px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .products h2 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .product-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+
+  .product-item {
+    width: 200px;
+    background-color: var(--cream);
+    padding: 16px;
+  }
+
+  .product-item img {
+    width: 100%;
+    height: 130px;
+    object-fit: cover;
+    margin-bottom: 12px;
+  }
+
+  .product-item h3 { font-size: 17px; margin-bottom: 4px; }
+
+  .price {
+    color: var(--tomato);
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .product-item a {
+    display: block;
+    text-align: center;
+    background-color: var(--leaf);
+    padding: 8px;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .product-item a:link    { color: var(--cream); }
+  .product-item a:visited { color: var(--cream); }
+  .product-item a:hover   { background-color: var(--leaf-dark); color: #F4C95D; }
+  .product-item a:active  { background-color: var(--tomato); color: var(--paper); }
+
+  /* ---------- About / info section ---------- */
+  .about {
+    padding: 50px 40px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    align-items: center;
+  }
+
+  .about-text { flex: 1; min-width: 280px; }
+  .about-image { flex: 1; min-width: 280px; }
+
+  .about-image img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+  }
+
+  .about h2 { margin-bottom: 14px; }
+
+  .about ul {
+    list-style: disc inside;
+    color: var(--muted);
+    margin-top: 12px;
+  }
+
+  .about ul li { margin-bottom: 6px; }
+
+  /* ---------- Sign in ---------- */
+  .signin {
+    padding: 50px 40px;
+    background: linear-gradient(rgba(251,246,236,.88), rgba(251,246,236,.88)), url("https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1600&q=85") center/cover;
+  }
+  .signin h2 { text-align: center; margin-bottom: 25px; }
+  .signin-form {
+    max-width: 400px; margin: auto; background: var(--paper); padding: 28px;
+    border-radius: 12px; box-shadow: 0 5px 18px rgba(0,0,0,.15);
+  }
+  .signin-form label { display:block; margin-bottom:6px; font-weight:bold; }
+  .signin-form input { width:100%; padding:11px; margin-bottom:16px; border:1px solid var(--line); border-radius:6px; }
+  .signin-form button { width:100%; border:0; padding:11px; background:var(--leaf); color:white; border-radius:6px; cursor:pointer; }
+  .signin-form button:hover { background:var(--leaf-dark); }
+
+  /* ---------- Footer ---------- */
+  footer {
+    background-color: var(--leaf-dark);
+    color: var(--cream);
+    text-align: center;
+    padding: 24px;
+    font-size: 14px;
+  }
+
+  footer a:link, footer a:visited { color: #F4C95D; text-decoration: none; }
+  footer a:hover  { text-decoration: underline; }
+  footer a:active { color: var(--tomato); }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 768px) {
+    header { flex-direction: column; align-items: flex-start; gap: 12px; }
+    nav ul { flex-wrap: wrap; gap: 14px; }
+    .hero { padding: 40px 20px; text-align: center; }
+    .hero h2, .hero p { max-width: 100%; margin-left: auto; margin-right: auto; }
+    .categories, .products, .about { padding: 40px 20px; }
+    .about { flex-direction: column; }
+  }
+
+  @media (max-width: 480px) {
+    .category-card, .product-item { width: 100%; }
+    header h1 { font-size: 24px; }
+    .hero h2 { font-size: 30px; }
+  }
+
+</style>
+</head>
+<body>
+
+  <header>
+    <h1>Fresh<span>Cart</span></h1>
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li class="has-dropdown"><a href="#categories">Categories ▾</a><div class="dropdown"><a href="#categories">Fruits & Vegetables</a><a href="#categories">Dairy & Eggs</a><a href="#categories">Bakery</a><a href="#categories">Pantry Staples</a></div></li>
+        <li><a href="#signin">Sign In</a></li>
+        <li><a href="#products">Products</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#footer">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="signin" id="signin">
+    <h2>Sign In to FreshCart</h2>
+    <form class="signin-form">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" placeholder="Enter username" required>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter password" required>
+      <button type="submit">Sign In</button>
+    </form>
+  </section>
+
+
+
+  <section class="hero" id="home">
+    <h2>Groceries delivered fresh, right to your door.</h2>
+    <p>Shop fruits, vegetables, dairy and pantry staples sourced daily from local farms — packed and delivered within hours.</p>
+    <a href="#products" class="cta">Start Shopping</a>
+  </section>
+
+  <section class="categories" id="categories">
+    <h2>Shop by Category</h2>
+    <div class="category-grid">
+
+      <div class="category-card">
+        <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=300&h=300&q=85" alt="Vegetables">
+        <h3>Vegetables</h3>
+        <p>Farm-fresh greens, roots and seasonal produce.</p>
+      </div>
+
+      <div class="category-card">
+        <img src="https://images.unsplash.com/photo-1619566636858-adf3ef46400b?auto=format&fit=crop&w=300&h=300&q=85" alt="Fruits">
+        <h3>Fruits</h3>
+        <p>Sweet, juicy fruit picked at peak ripeness.</p>
+      </div>
+
+      <div class="category-card">
+        <img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=300&h=300&q=85" alt="Dairy">
+        <h3>Dairy & Eggs</h3>
+        <p>Milk, cheese, curd and farm eggs, chilled fresh.</p>
+      </div>
+
+      <div class="category-card">
+        <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=300&h=300&q=85" alt="Pantry">
+        <h3>Pantry Staples</h3>
+        <p>Rice, pulses, spices and everyday cooking essentials.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="products" id="products">
+    <h2>Featured Products</h2>
+    <div class="product-list">
+
+      <div class="product-item">
+        <img src="https://images.unsplash.com/photo-1576045057995-568f588f82fb?auto=format&fit=crop&w=500&h=325&q=85" alt="Spinach">
+        <h3>Fresh Spinach</h3>
+        <p class="price">₹25 / bunch</p>
+        <a href="#">Add to Cart</a>
+      </div>
+
+      <div class="product-item">
+        <img src="https://images.unsplash.com/photo-1546094096-0df4bcaaa337?auto=format&fit=crop&w=500&h=325&q=85" alt="Tomatoes">
+        <h3>Ripe Tomatoes</h3>
+        <p class="price">₹40 / kg</p>
+        <a href="#">Add to Cart</a>
+      </div>
+
+      <div class="product-item">
+        <img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=500&h=325&q=85" alt="Milk">
+        <h3>Farm Milk</h3>
+        <p class="price">₹32 / litre</p>
+        <a href="#">Add to Cart</a>
+      </div>
+
+      <div class="product-item">
+        <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=500&h=325&q=85" alt="Rice">
+        <h3>Basmati Rice</h3>
+        <p class="price">₹110 / kg</p>
+        <a href="#">Add to Cart</a>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="about" id="about">
+    <div class="about-text">
+      <h2>Why Shop with FreshCart?</h2>
+      <p>We work directly with local farmers and dairies to bring you the freshest groceries at fair prices, delivered the same day you order.</p>
+      <ul>
+        <li>Same-day delivery across the city</li>
+        <li>Quality-checked fresh produce</li>
+        <li>Easy returns on damaged items</li>
+        <li>Secure online payments</li>
+      </ul>
+    </div>
+    <div class="about-image">
+      <img src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=1000&h=520&q=85" alt="Delivery van">
+    </div>
+  </section>
+
+  <footer id="footer">
+    <p>&copy; 2026 FreshCart Online Grocery Store. All rights reserved.</p>
+    <p><a href="mailto:support@freshcart.example">support@freshcart.example</a> | <a href="tel:+911234567890">+91 12345 67890</a></p>
+  </footer>
+
+</body>
+</html>
